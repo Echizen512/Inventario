@@ -52,6 +52,16 @@ if (!empty($_SESSION['active'])) {
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
+
+<style>
+body {
+  background-image: url('./background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
 <body>
   <div class="section">
     <div class="container">

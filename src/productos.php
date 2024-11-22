@@ -70,6 +70,16 @@ if (!empty($_POST)) {
 }
 include_once "includes/header.php";
 ?>
+
+<style>
+body {
+  background-image: url('../background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
 <div class="card shadow-lg">
     <div class="card-body">
         <div class="row">
@@ -122,10 +132,11 @@ include_once "includes/header.php";
         </div>
     </div>
 </div>
-
+<div class="card">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered" id="tbl">
+            <table class="table table-bordered" id="tbl" style="background-color: #FFFFFF;">
+
                     <thead class="thead-dark">
                         <tr>
                             <th class="text-center">ID</th>
@@ -165,5 +176,6 @@ include_once "includes/header.php";
             </div>
         </div>
     </div>
+</div>
 </div>
 <?php include_once "includes/footer.php"; ?>

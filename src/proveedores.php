@@ -2,7 +2,7 @@
 session_start();
 include "../conexion.php";
 $id_user = $_SESSION['idUser'];
-$permiso = "clientes";
+$permiso = "proveedores";
 $sql = mysqli_query($conexion, "SELECT p.*, d.* FROM permisos p INNER JOIN detalle_permisos d ON p.id = d.id_permiso WHERE d.id_usuario = $id_user AND p.nombre = '$permiso'");
 $existe = mysqli_fetch_all($sql);
 
@@ -11,7 +11,7 @@ if (empty($existe) && $id_user != 1) {
 }
 if (!empty($_POST)) {
     $alert = "";
-    if (empty($_POST['nombre']) || empty($_POST['telefono']) || empty($_POST['direccion']) || empty($_POST['cedula'])) {
+    if (empty($_POST['nombre']) || empty($_POST['telefono']) || empty($_POST['direccion']) || empty($_POST['rif'])) {
         $alert = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Todos los campos son obligatorios, excepto el Email
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -24,24 +24,24 @@ if (!empty($_POST)) {
         $telefono = $_POST['telefono'];
         $direccion = $_POST['direccion'];
         $email = $_POST['email'];
-        $cedula = $_POST['cedula'];
+        $rif = $_POST['rif'];
         $result = 0;
 
         if (empty($id)) {
-            $query = mysqli_query($conexion, "SELECT * FROM cliente WHERE nombre = '$nombre'");
+            $query = mysqli_query($conexion, "SELECT * FROM proveedor WHERE nombre = '$nombre'");
             $result = mysqli_fetch_array($query);
             if ($result > 0) {
                 $alert = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        El cliente ya existe
+                        El proveedor ya existe
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>';
             } else {
-                $query_insert = mysqli_query($conexion, "INSERT INTO cliente(nombre, telefono, direccion, email, cedula, idUser) values ('$nombre', '$telefono', '$direccion', '$email', '$cedula', '$id_user')");
+                $query_insert = mysqli_query($conexion, "INSERT INTO proveedor(nombre, telefono, direccion, email, rif, idUser) values ('$nombre', '$telefono', '$direccion', '$email', '$rif', '$id_user')");
                 if ($query_insert) {
                     $alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Cliente registrado
+                        Proveedor registrado
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -56,10 +56,10 @@ if (!empty($_POST)) {
                 }
             }
         } else {
-            $sql_update = mysqli_query($conexion, "UPDATE cliente SET nombre = '$nombre', telefono = '$telefono', direccion = '$direccion', email = '$email', cedula = '$cedula', idUser = '$id_user' WHERE idcliente = $id");
+            $sql_update = mysqli_query($conexion, "UPDATE proveedor SET nombre = '$nombre', telefono = '$telefono', direccion = '$direccion', email = '$email', rif = '$rif', idUser = '$id_user' WHERE idproveedor = $id");
             if ($sql_update) {
                 $alert = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Cliente Modificado
+                        Proveedor Modificado
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -78,6 +78,7 @@ if (!empty($_POST)) {
 }
 include_once "includes/header.php";
 ?>
+
 
 <style>
     body {
@@ -133,9 +134,9 @@ include_once "includes/header.php";
                         <div class="col-md-2">
                             <div class="form-group">
                                 <div class="text-center">
-                                    <label for="cedula" class="text-dark font-weight-bold">Cédula</label>
+                                    <label for="rif" class="text-dark font-weight-bold">RIF</label>
                                 </div>
-                                <input type="text" placeholder="Cédula" name="cedula" id="cedula" class="form-control">
+                                <input type="text" placeholder="RIF" name="rif" id="rif" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-5 offset-md-2">
@@ -170,24 +171,20 @@ include_once "includes/header.php";
                 <tbody>
                     <?php
                     include "../conexion.php";
-                    $query = mysqli_query($conexion, "SELECT * FROM cliente");
+                    $query = mysqli_query($conexion, "SELECT * FROM proveedor");
                     $result = mysqli_num_rows($query);
                     if ($result > 0) {
                         while ($data = mysqli_fetch_assoc($query)) { ?>
                             <tr>
-                                <td class="text-center"><?php echo $data['idcliente']; ?></td>
+                                <td class="text-center"><?php echo $data['idproveedor']; ?></td>
                                 <td class="text-center"><?php echo $data['nombre']; ?></td>
                                 <td class="text-center"><?php echo $data['telefono']; ?></td>
                                 <td class="text-center"><?php echo $data['direccion']; ?></td>
                                 <td class="text-center"><?php echo $data['email']; ?></td>
-                                <td class="text-center"><?php echo $data['cedula']; ?></td>
+                                <td class="text-center"><?php echo $data['rif']; ?></td>
                                 <td class="text-center">
-                                    <a href="#" onclick="editarCliente(<?php echo $data['idcliente']; ?>)"
-                                        class="btn btn-success"><i class='fas fa-edit'></i></a>
-                                    <form action="eliminar_cliente.php?id=<?php echo $data['idcliente']; ?>" method="post"
-                                        class="confirmar d-inline">
-                                        <button class="btn btn-danger" type="submit"><i class='fas fa-trash-alt'></i> </button>
-                                    </form>
+                                <a href="#" onclick="editarProveedor(<?php echo $data['idproveedor']; ?>)" class="btn btn-success"><i class='fas fa-edit'></i></a>
+
                                 </td>
                             </tr>
                         <?php }
@@ -199,4 +196,38 @@ include_once "includes/header.php";
 </div>
 </div>
 </div>
+
+<script>
+function editarProveedor(id) {
+    $.ajax({
+        url: './ajax.php',
+        type: 'GET',
+        data: { editarProveedor: id }, // Esto debe coincidir con lo que espera el servidor
+        success: function (response) {
+            try {
+                let data = JSON.parse(response); // Verifica si `response` está en formato JSON
+                if (data) {
+                    $('#id').val(data.idproveedor);
+                    $('#nombre').val(data.nombre);
+                    $('#telefono').val(data.telefono);
+                    $('#direccion').val(data.direccion);
+                    $('#email').val(data.email);
+                    $('#rif').val(data.rif);
+                    $('#btnAccion').val('Actualizar');
+                } else {
+                    alert('Datos no encontrados');
+                }
+            } catch (error) {
+                alert('Error al procesar la respuesta.');
+                console.error(error);
+            }
+        },
+        error: function () {
+            alert('Error al obtener los datos del proveedor.');
+        }
+    });
+}
+
+</script>
+
 <?php include_once "includes/footer.php"; ?>

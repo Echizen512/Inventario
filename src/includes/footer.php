@@ -7,7 +7,7 @@
             <script>
                 document.write(new Date().getFullYear())
             </script>
-            <a href="#" target="_blank" style="color: black;">Katha Collection </a>.
+            <a href="#" target="_blank" style="color: black;">- Katha Collection. copyright.  </a>.
         </div>
     </div>
 </footer>

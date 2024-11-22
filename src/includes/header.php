@@ -21,9 +21,9 @@ if (empty($_SESSION['active'])) {
 
 <body>
     <div class="wrapper ">
-        <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-1.jpg">
+        <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/OIP.jpg">
             <div class="logo"><a href="./" class="simple-text logo-normal">
-                Katha Collection 
+                    Katha Collection
                 </a></div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
@@ -64,22 +64,37 @@ if (empty($_SESSION['active'])) {
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link d-flex" href="proveedores.php">
+                            <i class="fas fa-truck mr-2 fa-2x"></i>
+                            <p> Proveedores</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex" href="compras.php">
+                            <i class="fas fa-shopping-cart mr-2 fa-2x"></i>
+                            <p> Compras</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link d-flex" href="auditoria.php">
                             <i class="fas fa-clipboard-list mr-2 fa-2x"></i>
                             <p> Auditoria</p>
                         </a>
                     </li>
+
                 </ul>
             </div>
         </div>
         <div class="main-panel">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-absolute fixed-top bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-absolute fixed-top"
+                style="background-color: #D8A7B1 !important;">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
                     </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="sr-only">Toggle navigation</span>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="sr-only">Navegación</span>
                         <span class="navbar-toggler-icon icon-bar"></span>
                         <span class="navbar-toggler-icon icon-bar"></span>
                         <span class="navbar-toggler-icon icon-bar"></span>
@@ -88,14 +103,16 @@ if (empty($_SESSION['active'])) {
 
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-user"></i>
                                     <p class="d-lg-none d-md-block">
                                         Cuenta
                                     </p>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#nuevo_pass">Perfil</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal"
+                                        data-target="#nuevo_pass">Perfil</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="salir.php">Cerrar Sesión</a>
                                 </div>

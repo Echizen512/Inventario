@@ -139,7 +139,14 @@ if (isset($_GET['q'])) {
     $data = mysqli_fetch_array($sql);
     echo json_encode($data);
     exit;
-} else if (isset($_GET['editarUsuario'])) {
+} else if (isset($_GET['editarProveedor'])) {
+    $idproveedor = $_GET['editarProveedor']; // Asegúrate de usar el índice correcto
+    $sql = mysqli_query($conexion, "SELECT * FROM proveedor WHERE idproveedor = $idproveedor");
+    $data = mysqli_fetch_assoc($sql); // Usar fetch_assoc para un mejor manejo del array asociativo
+    echo json_encode($data);
+    exit;
+}  
+else if (isset($_GET['editarUsuario'])) {
     $idusuario = $_GET['id'];
     $sql = mysqli_query($conexion, "SELECT * FROM usuario WHERE idusuario = $idusuario");
     $data = mysqli_fetch_array($sql);

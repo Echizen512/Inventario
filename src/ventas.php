@@ -105,6 +105,15 @@ if ($response !== false) {
 </script>
 
 
+<style>
+body {
+  background-image: url('../background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
 <div class="row">
     <div class="col-lg-12">
         <div class="form-group">
@@ -217,6 +226,7 @@ if ($response !== false) {
                 </div>
             </div>
         </div>
+        <div class="card">
         <div class="table-responsive">
             <table class="table table-hover" id="tblDetalle">
                 <thead class="thead-dark">
@@ -248,7 +258,7 @@ if ($response !== false) {
             </table>
         </div>
     </div>
-
+    </div>
 </div>
 </div>
 

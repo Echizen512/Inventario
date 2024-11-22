@@ -84,6 +84,16 @@ if (!empty($_POST)) {
 include "includes/header.php";
 ?>
 
+<style>
+    body {
+        background-image: url('../background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>
+
+
 <div class="card">
     <div class="card-body">
         <form action="" method="post" autocomplete="off" id="formulario">
@@ -100,7 +110,8 @@ include "includes/header.php";
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="correo">Correo</label>
-                        <input type="email" class="form-control" placeholder="Correo Electrónico" name="correo" id="correo">
+                        <input type="email" class="form-control" placeholder="Correo Electrónico" name="correo"
+                            id="correo">
                     </div>
 
                 </div>
@@ -119,45 +130,53 @@ include "includes/header.php";
                 </div>
             </div>
             <div class="text-center">
-            <input type="submit" value="Registrar" class="btn btn-primary" style="background: #148aef;" id="btnAccion">
-            <input type="button" value="Nuevo" class="btn btn-success" id="btnNuevo" onclick="limpiar()">
+                <input type="submit" value="Registrar" class="btn btn-primary" style="background: #148aef;"
+                    id="btnAccion">
+                <input type="button" value="Nuevo" class="btn btn-success" id="btnNuevo" onclick="limpiar()">
             </div>
         </form>
     </div>
 </div>
-<div class="table-responsive">
-    <table class="table  table-striped table-bordered mt-2" id="tbl">
-        <thead class="table-dark">
-            <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center">Nombre</th>
-                <th class="text-center">Correo</th>
-                <th class="text-center">Usuario</th>
-                <th class="text-center">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $query = mysqli_query($conexion, "SELECT * FROM usuario");
-            $result = mysqli_num_rows($query);
-            if ($result > 0) {
-                while ($data = mysqli_fetch_assoc($query)) { ?>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table  table-striped table-bordered mt-2" id="tbl">
+                <thead class="table-dark">
                     <tr>
-                        <td class="text-center"><?php echo $data['idusuario']; ?></td>
-                        <td class="text-center"><?php echo $data['nombre']; ?></td>
-                        <td class="text-center"><?php echo $data['correo']; ?></td>
-                        <td class="text-center"><?php echo $data['usuario']; ?></td>
-                        <td class="text-center">
-                            <a href="rol.php?id=<?php echo $data['idusuario']; ?>" class="btn btn-warning"><i class='fas fa-key'></i></a>
-                            <a href="#" onclick="editarUsuario(<?php echo $data['idusuario']; ?>)" class="btn btn-success"><i class='fas fa-edit'></i></a>
-                            <form action="eliminar_usuario.php?id=<?php echo $data['idusuario']; ?>" method="post" class="confirmar d-inline">
-                                <button class="btn btn-danger" type="submit"><i class='fas fa-trash-alt'></i> </button>
-                            </form>
-                        </td>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Correo</th>
+                        <th class="text-center">Usuario</th>
+                        <th class="text-center">Acciones</th>
                     </tr>
-            <?php }
-            } ?>
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    <?php
+                    $query = mysqli_query($conexion, "SELECT * FROM usuario");
+                    $result = mysqli_num_rows($query);
+                    if ($result > 0) {
+                        while ($data = mysqli_fetch_assoc($query)) { ?>
+                            <tr>
+                                <td class="text-center"><?php echo $data['idusuario']; ?></td>
+                                <td class="text-center"><?php echo $data['nombre']; ?></td>
+                                <td class="text-center"><?php echo $data['correo']; ?></td>
+                                <td class="text-center"><?php echo $data['usuario']; ?></td>
+                                <td class="text-center">
+                                    <a href="rol.php?id=<?php echo $data['idusuario']; ?>" class="btn btn-warning"><i
+                                            class='fas fa-key'></i></a>
+                                    <a href="#" onclick="editarUsuario(<?php echo $data['idusuario']; ?>)"
+                                        class="btn btn-success"><i class='fas fa-edit'></i></a>
+                                    <form action="eliminar_usuario.php?id=<?php echo $data['idusuario']; ?>" method="post"
+                                        class="confirmar d-inline">
+                                        <button class="btn btn-danger" type="submit"><i class='fas fa-trash-alt'></i> </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php }
+                    } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <?php include_once "includes/footer.php"; ?>

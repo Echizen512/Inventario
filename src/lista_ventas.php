@@ -11,6 +11,17 @@ if (empty($existe) && $id_user != 1) {
 $query = mysqli_query($conexion, "SELECT v.*, c.idcliente, c.nombre FROM ventas v INNER JOIN cliente c ON v.id_cliente = c.idcliente");
 include_once "includes/header.php";
 ?>
+
+<style>
+body {
+  background-image: url('../background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">

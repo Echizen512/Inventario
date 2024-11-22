@@ -21,6 +21,17 @@ if (!$query) {
 
 include_once "includes/header.php";
 ?>
+
+<style>
+body {
+  background-image: url('../background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>
+
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
