@@ -89,6 +89,9 @@ include_once "includes/header.php";
 </style>
 
 <div class="card">
+<div class="card-header text-white text-center" style="background: #FF6F61;">
+        Clientes
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
@@ -156,7 +159,7 @@ include_once "includes/header.php";
     <div class="col-md-12">
         <div class="table-responsive">
             <table class="table table-striped table-bordered" id="tbl">
-                <thead class="thead-dark">
+                <thead style="background: #FF6F61; color: white;">
                     <tr>
                         <th class="text-center">ID</th>
                         <th class="text-center">Nombre</th>

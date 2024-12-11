@@ -76,6 +76,24 @@ if (empty($_SESSION['active'])) {
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link d-flex" href="egresos.php">
+                            <i class="fas fa-dollar-sign mr-2 fa-2x"></i>
+                            <p> Egresos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex" href="prestamos.php">
+                            <i class="fas fa-hand-holding-usd mr-2 fa-2x"></i>
+                            <p> Préstamos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex" href="form.php">
+                            <i class="fas fa-chart-line mr-2 fa-2x"></i>
+                            <p> Reportes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link d-flex" href="auditoria.php">
                             <i class="fas fa-clipboard-list mr-2 fa-2x"></i>
                             <p> Auditoria</p>

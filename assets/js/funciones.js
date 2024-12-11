@@ -68,6 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#btn_generar').click(function (e) {
         e.preventDefault();
         var rows = $('#tblDetalle tr').length;
+        var metodoPago = $('#metodo_pago').val();  // Supongamos que este es el campo del método de pago
+        var tipoPago = $('#tipo_pago').val();
         if (rows > 2) {
             var action = 'procesarVenta';
             var id = $('#idcliente').val();
@@ -76,19 +78,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 async: true,
                 data: {
                     procesarVenta: action,
-                    id: id
+                    id: id,
+                    metodoPago: metodoPago,  // Se pasa el método de pago
+                    tipo_pago: tipoPago
                 },
                 success: function (response) {
-
                     const res = JSON.parse(response);
-                    if (response != 'error') {
+                    if (res.mensaje !== 'error') {
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
                             title: 'Venta Generada',
                             showConfirmButton: false,
                             timer: 2000
-                        })
+                        });
                         setTimeout(() => {
                             generarPDF(res.id_cliente, res.id_venta);
                             location.reload();
@@ -100,11 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
                             title: 'Error al generar la venta',
                             showConfirmButton: false,
                             timer: 2000
-                        })
+                        });
                     }
                 },
                 error: function (error) {
-
+                    // Manejo de errores aquí
+                    console.error('Error al procesar la venta', error);
                 }
             });
         } else {
@@ -114,12 +118,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: 'No hay producto para generar la venta',
                 showConfirmButton: false,
                 timer: 2000
-            })
+            });
         }
     });
+    
     if (document.getElementById("detalle_venta")) {
         listar();
     }
+    
 })
 
 function calcularPrecio(e) {

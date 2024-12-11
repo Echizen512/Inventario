@@ -26,7 +26,7 @@ body {
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-light" id="tbl">
-                <thead class="thead-dark">
+                <thead style="background: #FF6F61; color: white;">
                     <tr>
                         <th class="text-center">ID</th>
                         <th class="text-center">Cliente</th>
@@ -40,7 +40,7 @@ body {
                         <tr>
                             <td class="text-center"><?php echo $row['id']; ?></td>
                             <td class="text-center"><?php echo $row['nombre']; ?></td>
-                            <td class="text-center"><?php echo $row['total'] . ' $'; ?></td>
+                            <td class="text-center"><?php echo $row['total'] . ' BS'; ?></td>
                             <td class="text-center"><?php echo date('d, m, Y', strtotime($row['fecha'])); ?></td>
                             <td class="text-center">
                                 <a href="pdf/generar.php?cl=<?php echo $row['id_cliente'] ?>&v=<?php echo $row['id'] ?>" target="_blank" class="btn btn-danger"><i class="fas fa-file-pdf"></i></a>

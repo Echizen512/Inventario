@@ -78,11 +78,19 @@ if (isset($_GET['q'])) {
 } else if (isset($_GET['procesarVenta'])) {
     $id_cliente = $_GET['id'];
     $id_user = $_SESSION['idUser'];
-    
-    $consulta = mysqli_query($conexion, "SELECT total, SUM(total) AS total_pagar FROM detalle_temp WHERE id_usuario = $id_user");
+    $metodo_pago = $_GET['metodoPago'];  
+    $tipo_pago = $_GET['tipo_pago'];
+
+    // Obtener el total de la venta
+    $consulta = mysqli_query($conexion, "SELECT SUM(total) AS total_pagar FROM detalle_temp WHERE id_usuario = $id_user");
+    if (!$consulta) {
+        echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al consultar el total de la venta'));
+        die();
+    }
     $result = mysqli_fetch_assoc($consulta);
     $total = $result['total_pagar'];
-    
+
+    // Obtener el promedio del dólar
     $promedioDolar = obtenerPromedioDolar();
     if ($promedioDolar !== null) {
         $totalBolivares = $total * $promedioDolar;
@@ -90,35 +98,70 @@ if (isset($_GET['q'])) {
         echo json_encode(array('mensaje' => 'error_dolar'));
         die();
     }
-    
-    $insertar = mysqli_query($conexion, "INSERT INTO ventas(id_cliente, total, id_usuario) VALUES ($id_cliente, '$totalBolivares', $id_user)");
-    if ($insertar) {
-        $id_maximo = mysqli_query($conexion, "SELECT MAX(id) AS total FROM ventas");
-        $resultId = mysqli_fetch_assoc($id_maximo);
-        $ultimoId = $resultId['total'];
-        $consultaDetalle = mysqli_query($conexion, "SELECT * FROM detalle_temp WHERE id_usuario = $id_user");
-        while ($row = mysqli_fetch_assoc($consultaDetalle)) {
-            $id_producto = $row['id_producto'];
-            $cantidad = $row['cantidad'];
-            $desc = $row['descuento'];
-            $precio = $row['precio_venta'];
-            $total = $row['total'];
-            $insertarDet = mysqli_query($conexion, "INSERT INTO detalle_venta (id_producto, id_venta, cantidad, precio, descuento, total) VALUES ($id_producto, $ultimoId, $cantidad, '$precio', '$desc', '$total')");
-            $stockActual = mysqli_query($conexion, "SELECT * FROM producto WHERE codproducto = $id_producto");
-            $stockNuevo = mysqli_fetch_assoc($stockActual);
-            $stockTotal = $stockNuevo['existencia'] - $cantidad;
-            $stock = mysqli_query($conexion, "UPDATE producto SET existencia = $stockTotal WHERE codproducto = $id_producto");
-        } 
-        if ($insertarDet) {
-            $eliminar = mysqli_query($conexion, "DELETE FROM detalle_temp WHERE id_usuario = $id_user");
-            $msg = array('id_cliente' => $id_cliente, 'id_venta' => $ultimoId);
-        } 
-    } else {
-        $msg = array('mensaje' => 'error');
+
+    // Multiplicar el total por 1.16 para agregar el 16% de IVA
+    $totalBolivaresConIVA = $totalBolivares * 1.16;
+
+    // Inserción de la venta con método de pago
+    $insertar = mysqli_query($conexion, "INSERT INTO ventas(id_cliente, total, id_usuario, metodo_pago, tipo_pago) VALUES ($id_cliente, '$totalBolivaresConIVA', $id_user, '$metodo_pago', '$tipo_pago')");
+    if (!$insertar) {
+        echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al insertar la venta'));
+        die();
     }
+
+    $id_maximo = mysqli_query($conexion, "SELECT MAX(id) AS total FROM ventas");
+    if (!$id_maximo) {
+        echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al obtener el ID de la venta'));
+        die();
+    }
+    $resultId = mysqli_fetch_assoc($id_maximo);
+    $ultimoId = $resultId['total'];
+
+    // Procesar los detalles de la venta
+    $consultaDetalle = mysqli_query($conexion, "SELECT * FROM detalle_temp WHERE id_usuario = $id_user");
+    while ($row = mysqli_fetch_assoc($consultaDetalle)) {
+        $id_producto = $row['id_producto'];
+        $cantidad = $row['cantidad'];
+        $desc = $row['descuento'];
+        $precio = $row['precio_venta'];
+        $total = $row['total'];
+
+        // Multiplicar el precio por 1.16 para agregar el IVA a cada producto
+        $precioConIVA = $precio * 1.16;
+        $totalConIVA = $total * 1.16;  // Aplicar IVA al total de cada producto
+
+        // Insertar el detalle con el precio y total con IVA
+        $insertarDet = mysqli_query($conexion, "INSERT INTO detalle_venta (id_producto, id_venta, cantidad, precio, descuento, total) VALUES ($id_producto, $ultimoId, $cantidad, '$precioConIVA', '$desc', '$totalConIVA')");
+        if (!$insertarDet) {
+            echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al insertar el detalle de la venta'));
+            die();
+        }
+
+        // Actualizar el stock
+        $stockActual = mysqli_query($conexion, "SELECT existencia FROM producto WHERE codproducto = $id_producto");
+        $stockNuevo = mysqli_fetch_assoc($stockActual);
+        $stockTotal = $stockNuevo['existencia'] - $cantidad;
+
+        $stock = mysqli_query($conexion, "UPDATE producto SET existencia = $stockTotal WHERE codproducto = $id_producto");
+        if (!$stock) {
+            echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al actualizar el stock'));
+            die();
+        }
+    }
+
+    // Eliminar los detalles temporales de la venta
+    $eliminar = mysqli_query($conexion, "DELETE FROM detalle_temp WHERE id_usuario = $id_user");
+    if (!$eliminar) {
+        echo json_encode(array('mensaje' => 'error', 'detalle' => 'Error al eliminar detalles temporales'));
+        die();
+    }
+
+    $msg = array('id_cliente' => $id_cliente, 'id_venta' => $ultimoId);
     echo json_encode($msg);
     die();
-} else if (isset($_GET['descuento'])) {
+}
+
+else if (isset($_GET['descuento'])) {
     $id = $_GET['id'];
     $desc = $_GET['desc'];
     $consulta = mysqli_query($conexion, "SELECT * FROM detalle_temp WHERE id = $id");

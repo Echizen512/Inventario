@@ -36,7 +36,7 @@ body {
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-light" id="tbl">
-                <thead class="thead-dark">
+                <thead style="background: #FF6F61; color: white;">
                     <tr>
                         <th class="text-center">Tabla Afectada</th>
                         <th class="text-center">Acción Realizada</th>
