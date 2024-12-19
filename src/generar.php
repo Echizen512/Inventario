@@ -19,7 +19,7 @@ class PDF extends FPDF
         $this->SetFont('Arial', '', 12);
         $this->Cell(0, 10, 'KATHA COLLECTION MODA SIN PARADIGMA C.A', 0, 1, 'C');
         $this->SetFont('Arial', '', 8);
-        $this->Cell(0, 5, 'RIF: J121344534', 0, 1, 'C');
+        $this->Cell(0, 5, 'RIF: J50564467-0', 0, 1, 'C');
     }
 
     function AddReportDate($date)
@@ -258,12 +258,14 @@ while ($row = mysqli_fetch_assoc($result_ventas)) {
     }
 }
 
-// Obtén las cuentas por pagar
-$query_pagos = "SELECT descripcion, monto, metodo_pago FROM pagos WHERE fecha = '$date'";
+// Obtén las cuentas por pagar con observación "Pendiente"
+$query_pagos = "SELECT descripcion, monto, metodo_pago FROM pagos WHERE observaciones = 'Pendiente'";
 $result_pagos = mysqli_query($conexion, $query_pagos);
+
 if (mysqli_num_rows($result_pagos) === 0) {
     die('No hay datos para generar el reporte.');
 }
+
 while ($row = mysqli_fetch_assoc($result_pagos)) {
     $cuentas_por_pagar[] = ['descripcion' => $row['descripcion'], 'monto' => $row['monto'], 'metodo_pago' => $row['metodo_pago']];
 
@@ -280,9 +282,6 @@ while ($row = mysqli_fetch_assoc($result_pagos)) {
         $ventas_pago_movil += $row['monto'];
     }
 }
-
-
-// Inicializa las variables para las sumas
 
 
 // Obtén los egresos
@@ -344,9 +343,6 @@ while ($row = mysqli_fetch_assoc($result_compras)) {
         $egresos_pago_movil += $row['monto'];
     }
 }
-
-
-
 
 
 $total_cuentas_por_pagar = array_reduce($cuentas_por_pagar, function ($carry, $cuenta) {
